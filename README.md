@@ -1,42 +1,17 @@
-Project Todos
-
-- [x] Requirement analysis
-- [x] Selecting tech stack
-- [x] System design
-- [x] Api end points
-- [ ] Development (Ongoing)
-- [x] Deployment
-- [ ] Api Documentation
-- [x] Browser caching and cache-control
-- [ ] Rate limiting
-- [x] Write test case
-- [ ] Complete documentation
-
-
+## GenTrandz: A Scalable and Modern Multi-Vendor eCommerce Platform
 ## Table of Contents
 
 - [Project Overview](#project-overview)
-- [Technology Stack](#technology-stack)
 - [System Design](#system-design)
-- [Getting Started](#getting-started)
-- [Folder Structure](#folder-structure)
-- [Usage](#usage)
+- [Data Model Design](#data-mode-design)
+- [Architecture Overview](#architecture-overview)
+- [Technology Stack](#technology-stack)
+- [User Interface](#user-interface)
 
 ## Project Overview
 
-Welcome to the frontend repository of matt-mons, the innovative multi vendor ecommerce Management System designed to streamline your ecommerce management experience. Firstly I will go with MVP which will meet the minimum requirements to run our initial business, which means I am prioritising the user fetching feature and the manager roll feature that will be developed first. Here I am planning version(v1) requirements.
+Welcome to GenTrandz, an innovative multi-vendor eCommerce platform designed to simplify business and management operations. I have successfully developed the MVP (Minimum Viable Product), which covers the core functionalities required for our initial launch. Currently, I am focusing on extending the platform by developing advanced features for the Admin and Super Admin roles to enhance control and scalability
 
-This frontend repository works in conjunction with the matt-mons backend, providing a user-friendly interface for managing vehicles efficiently.
-
-## Technology Stack
-
-- **Next.js:** React framework for building user interfaces.
-- **Ant Design:** UI library for React components.
-- **Tailwind CSS:** Utility-first CSS framework.
-- **Redux:** State management for React applications.
-- **Socket.io:** Real-time bidirectional event-based communication.
-- **Framer Motion:** Animation library for React components.
-- **EmailJS:** Service for sending emails directly from client-side JavaScript.
 
 ## System Design
 
@@ -50,12 +25,11 @@ I will design the system for five diffrent role Customer, Sells Manager, Seller,
 
 - Buy, wishlist, or report product
 - Checkout cart
-- Take AI guidance to shop (v2)
 - View,search and filter products
 - Make and Track Order
 - Read blogs
-- Contact with supports or chat with sales manager(V2)
-- Take the help of map to navigate towards shop(V2)
+- Contact with supports or chat with sales manager
+- Take the help of map to navigate towards shop
 
 **Sells Manager**
 
@@ -63,7 +37,7 @@ I will design the system for five diffrent role Customer, Sells Manager, Seller,
 - Edit product(availability and others)
 - Accept order
 - Update tracking
-- Chat with customer(V2)
+- Chat with customer
 
 **Seller**
 
@@ -74,7 +48,7 @@ I will design the system for five diffrent role Customer, Sells Manager, Seller,
 - Edit product(availability and others)
 - Accept order
 - Update tracking
-- Chat with customer(V2)
+- Chat with sells Managers
 
 **Admin**
 
@@ -85,7 +59,7 @@ I will design the system for five diffrent role Customer, Sells Manager, Seller,
 - Assist seller and sales manager to get a better user experience
 - Collect feedback from seller and Sells manager
 
-**Admin**
+**Super Admin**
 
 - Add, remove a admin
 - Business supervision
@@ -94,13 +68,13 @@ I will design the system for five diffrent role Customer, Sells Manager, Seller,
 
 - High reliability.
 - High availability with minimal latency.
-- The system should be scalable and efficient(V2)
+- The system should be scalable and efficient
 
 ### Extended requirements
 
 - Customers can rate the product, shop after it's completed.
 - Payment processing.
-- Metrics and analytics(V2).
+- Metrics and analytics
 
 ## Estimation and Constraints
 
@@ -108,9 +82,7 @@ Let's start with the estimation and constraints.
 
 ### Traffic
 
-Let us assume we have 100 million daily active users (DAU) with 1 million drivers and on average our platform enables 10 million rides daily.
-Let us assume we have 10000 active users(DAU)
-If on average each user performs 10 actions (such as request a check available product, addtoCart, checkout, etc.) we will have to handle 100000 requests daily.
+Let us assume we have 10000 daily active users (DAU).If on average each user performs 10 actions (such as request a check available product, addtoCart, checkout, etc.) we will have to handle 100000 requests daily.
 
 $$
 10000 \times 10 \space actions = 100000 \space /day
@@ -118,10 +90,10 @@ $$
 
 **What would be Requests Per Second (RPS) for our system?**
 
-100000 requests per day translate into 1.15 requests per second.
+100000 requests per day translate into 1.2 requests per second.
 
 $$
-\frac{100000 \space}{(24 \space hrs \times 3600 \space seconds)} = \sim 1.15 \space requests/second
+\frac{100000 \space}{(24 \space hrs \times 3600 \space seconds)} = \sim 1.2 \space requests/second
 $$
 
 ### Storage
@@ -140,10 +112,10 @@ $$
 
 ### Bandwidth
 
-As our system is handling 0.04 GB of ingress every day, we will require a minimum bandwidth of around 0.462 KB per second.
+As our system is handling 0.04 GB of ingress every day, we will require a minimum bandwidth of around 0.46 KB per second.
 
 $$
-\frac{0.04 \space GB}{(24 \space hrs \times 3600 \space seconds)} = \sim 0.462 \space KB/second
+\frac{0.04 \space GB}{(24 \space hrs \times 3600 \space seconds)} = \sim 0.46 \space KB/second
 $$
 
 ### High-level estimate
@@ -153,12 +125,15 @@ Here is our high-level estimate:
 | Type                      | Estimate    |
 | ------------------------- | ----------- |
 | Daily active users (DAU)  | 10000       |
-| Requests per second (RPS) | 1.15/s      |
+| Requests per second (RPS) | 1.2/s      |
 | Storage (per day)         | ~0.04 GB    |
 | Storage (10 years)        | ~146 GB     |
-| Bandwidth                 | ~0.462 KB/s |
+| Bandwidth                 | ~0.46 KB/s |
 
-## Data model design
+
+
+
+## Data Model Design
 
 This is the general data model which reflects our requirements.
 
@@ -166,67 +141,102 @@ This is the general data model which reflects our requirements.
 
 We have the following tables:
 
-**customers**
+**User**  
+This is the user table that includes all user data with fields such as `id`, `email`, `password`, `role`, `createdAt`, `updatedAt`.
 
-This table will contain a customer's information such as `name`, `email`, and other details.
+**SuperAdmin**  
+This table contains data for super admins, including `id`, `fullName`, `contactNumber`, `emergencyContactNumber`, `address`, `profileImg`, `nidNumber`, `userId`, `isActive`, `createdAt`, `updatedAt`.
 
-**drivers**
+**Admin**  
+This table stores admin data, including fields like `id`, `fullName`, `contactNumber`, `emergencyContactNumber`, `address`, `profileImg`, `userId`, `nidNumber`, `isActive`, `createdAt`, `updatedAt`.
 
-This table will contain a driver's information such as `name`, `email`, `dob` and other details.
+**Seller**  
+This table holds seller data with fields such as `id`, `fullName`, `contactNumber`, `emergencyContactNumber`, `address`, `profileImg`, `userId`, `nidNumber`, `isActive`, `createdAt`, `updatedAt`.
 
-**trips**
+**SellsManager**  
+This table stores data for sales managers with fields like `id`, `fullName`, `contactNumber`, `emergencyContactNumber`, `address`, `profileImg`, `userId`, `nidNumber`, `isActive`, `shopId`, `createdAt`, `updatedAt`.
 
-This table represents the trip taken by the customer and stores data such as `source`, `destination`, and `status` of the trip.
+**Customer**  
+This table holds customer information, including fields like `id`, `fullName`, `contactNumber`, `emergencyContactNumber`, `address`, `profileImg`, `userId`, `isActive`, `dob`, `createdAt`, `updatedAt`.
 
-**cabs**
+**Conversation**  
+This table contains conversation data, including `id`, `message`, `participants`, `senderId`, `receiverId`, `createdAt`, `updatedAt`.
 
-This table stores data such as the registration number, and type (like Uber Go, Uber XL, etc.) of the cab that the driver will be driving.
+**Message**  
+This table holds message data within conversations with fields such as `id`, `message`, `senderId`, `receiverId`, `conversationId`, `createdAt`, `updatedAt`.
 
-**ratings**
+**Shop**  
+This table contains information about shops, including `id`, `sellerId`, `shopName`, `shopImage`, `rating`, `location`, `isVerified`, `createdAt`, `updatedAt`.
 
-As the name suggests, this table stores the `rating` and `feedback` for the trip.
+**Coupon**  
+This table stores coupon data related to shops, including `id`, `shopId`, `couponName`, `discount`, `shippingCharge`, `validTill`, `createdBy`, `createdAt`, `updatedAt`.
 
-**payments**
+**Product**  
+This table contains product data for each shop, including `id`, `shopId`, `productName`, `productMainImage`, `productAdditionalImages`, `shortDescription`, `productDetails`, `minPrice`, `discountPrice`, `discountPercentage`, `moneySaved`, `sellCount`, `createdBy`, `categoryId`, `productSkuId`, `productTags`, `createdAt`, `updatedAt`, `orderId`, `orderOrderId`, `cartId`.
 
-The payments table contains the payment-related data with the corresponding `tripID`.
+**Category**  
+This table holds product categories with fields like `id`, `image`, `title`, `createdAt`, `updatedAt`.
+
+**ProductSku**  
+This table contains SKU (Stock Keeping Unit) information for products with fields like `id`, `title`, `quantity`, `availableColor`, `availableSize`, `shopId`, `createdAt`, `updatedAt`.
+
+**Color**  
+This table contains color options for products with fields such as `id`, `title`, `shopId`, `createdAt`, `updatedAt`.
+
+**Size**  
+This table stores size options for products with fields such as `id`, `title`, `shopId`, `createdAt`, `updatedAt`.
+
+**ProductTags**  
+This table holds tags related to products, including `id`, `title`, `createdAt`, `updatedAt`.
+
+**Cart**  
+This table stores data related to customer shopping carts with fields such as `id`, `userId`, `productId`, `quantity`, `createdAt`, `updatedAt`.
+
+**Order**  
+This table stores order data, including `id`, `fullName`, `contactNumber`, `emergencyContactNumber`, `email`, `address`, `subTotal`, `shippingCharge`, `tax`, `total`, `paidAmount`, `dueAmount`, `orderStatus`, `trnsId`, `isPaid`, `orderPlacedAt`, `payment_acceptedAt`, `delivered_to_curier`, `curier_wareshouse`, `being_delivered`, `delivered`, `canceledAt`, `userId`, `shopId`, `couponId`, `createdAt`, `updatedAt`.
+
+**OrderItem**  
+This table stores the details of items in an order, including `id`, `orderId`, `productId`, `quantity`, `createdAt`.
+
+**Payment**  
+This table holds payment information for orders, including `id`, `trnxId`, `userId`, `orderId`, `createdAt`, `updatedAt`.
+
+**WishList**  
+This table stores customer wish list items, including `id`, `userId`, `productId`, `createdAt`, `updatedAt`.
+
+**ReviewAndRatings**  
+This table holds product reviews and ratings from customers, including `id`, `customerId`, `productId`, `comment`, `rating`, `like`, `disLike`, `createdAt`, `updatedAt`.
+
+
 
 ### What kind of database should we use?
 
-While our data model seems quite relational, we don't necessarily need to store everything in a single database, as this can limit our scalability and quickly become a bottleneck.
+We are developing a monolithic application, and we will use a single [PostgreSQL](https://www.postgresql.org) database to store all of our data. While our data model is quite relational, keeping everything in one database is suitable for our current architecture. This allows us to leverage PostgreSQL's powerful relational capabilities, including complex queries, transactions, and referential integrity, which are critical for our application.
 
-We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org).
+Despite using a monolithic architecture, we can still ensure scalability and maintainability by organizing the database schema in a way that logically separates concerns. We will define clear ownership of tables and ensure that the application components interact with the database in a modular and efficient way. This approach enables us to take full advantage of PostgreSQL's features while avoiding the complexity of managing multiple databases.
 
 ## High-level design
 
 Now let us do a high-level design of our system.
 
-### Architecture
-
-We will be using Monolith architecure while we are building our first version. According to demand we will scale it horizontally and If it reach to limitations we will consider to build to microservice(May be on v3).
+We will be using Monolith architecure while we are building the MVP. According to demand we will scale it horizontally and If it reach to limitations we will consider to build to microservice.
 
 ### How is the service expected to work?
 
 Here's how our service is expected to work:
 
-1. Customer requests a ride by specifying the source, destination, cab type, payment method, etc.
-2. Ride service registers this request, finds nearby drivers, and calculates the estimated time of arrival (ETA).
-3. The request is then broadcasted to the nearby drivers for them to accept or deny.
-4. If the driver accepts, the customer is notified about the live location of the driver with the estimated time of arrival (ETA) while they wait for pickup.
-5. The customer is picked up and the driver can start the trip.
-6. Once the destination is reached, the driver will mark the ride as complete and collect payment.
-7. After the payment is complete, the customer can leave a rating and feedback for the trip if they like.
-
+- **Customer** places an order by selecting products, adding them to the cart, choosing a payment method, and proceeding to checkout. They can also wishlist products, search, filter items, track orders, and contact support.
+- **Seller** manages their shop by creating or editing products, assigning managers, removing reported items, and offering discounts. They accept orders, update tracking, and communicate with the sales manager.
+- **Sells Manager** creates and edits products, accepts orders, and tracks shipments. They also chat with customers and assist sellers.
+- **Admin** supervises the business, verifies or bans sellers, manages content, and ensures a smooth experience for sellers and sales managers.
+- **Super Admin** manages admins, oversees the entire system, and ensures business operations run smoothly.
 ### Payments
 
 Handling payments at scale is challenging, to simplify our system we can use a third-party payment processor like [Stripe](https://stripe.com) or [SSLCommerz](https://www.paypal.com). Once the payment is complete, the payment processor will redirect the user back to our application and we can set up a [webhook](https://en.wikipedia.org/wiki/Webhook) to capture all the payment-related data.
 
 ### Notifications
 
-We will send notifications through our server(v2)
-
-## Detailed design
-
-It's time to discuss our design decisions in detail.
+We will send notifications through our server in future.
 
 ## Identify and resolve bottlenecks
 
@@ -236,75 +246,25 @@ Let us identify and resolve bottlenecks such as single points of failure in our 
 - "How can we reduce the load on our database?"
 
 To make our system more resilient we can do the following:
-
+- Implement load balancer to distribute traffic across multiple instances or containers
+- Use a queue system (e.g., RabbitMQ or Kafka) to offload heavy tasks like email sending, Invoice generation etc.
 - Implement logging to identify the problem
 - Using caching to reduce load on our database.
 
-## Getting Started
 
-To get started with the ECOM frontend, follow these steps:
 
-1. Clone the repository: `git clone [frontend_repository_url]`
-2. Install dependencies: `yarn install`
-3. Configure environment variables. (Check env.example)
-4. Start the development server: `yarn dev`
 
-## Folder Structure
+## Architecture Overview
 
-The frontend codebase follows given modular and organized folder structure:
 
-- `/src`
-  - `/app`: Pages of app router.
-  - `/assets`: Image, svg and other resources.
-  - `/components`: Reusable React components.
-  - `/redux`: Redux store setup and actions.
-    - `/api`: API requests and integration with the backend.
-  - `constants`: Constant vaiable of the project.
-  - `helpers`: Helper functions.
-  - `hooks`: Necessary hooks.
-  - `lib`: Libarary functions.
-  - `schemas`: Schemas of the project for validation.
-  - `services`: Service like auth service.
-  - `types`: Defined common types of the project.
-  - `utils`: Utility functions declared here.
 
-## Usage
 
-To interact with the ECOM frontend, follow these steps:
+## Technology Stack
+- **Frontend**: Typescript, Next.js, Redux, Socket.io, Framer Motion, Email.js, React quill, Axios, Tailwind, Ant Design, etc
+- **Backend**: Typescript, Node.js, Express.js, Docker, Nginx, PostgreSQL, Prisma, Redis, Stripe, Socket.io, Jest, bcrypt, JWT, etc
 
-1. **Installation:**
+- **Containerization**: 
+  - **Docker** for creating, managing, and deploying containers.
+  - **Docker Hub** for publishing and accessing the container images.
 
-   - Clone the frontend repository: `git clone [frontend_repository_url]`
-   - Install dependencies: `yarn install`
-
-2. **Configuration:**
-
-3. **Development Server:**
-
-   - Start the development server: `yarn dev`
-   - Open your browser and navigate to `http://localhost:3000` to access the ECOM application in development mode.
-
-4. **User Authentication:**
-
-   - Use the predefined user accounts for testing:
-     - **Super Admin:**
-       - User ID:
-       - Password:
-     - **Admin:**
-       - User ID:
-       - Password:
-
-5. **Explore Features:**
-
-   - Navigate through the dashboard to access different features:
-
-6. **Animation with Framer Motion:**
-
-   - Experience smooth and interactive animations integrated with Framer Motion.
-
-7. **Real-time Communication with Socket.io:**
-
-   - Test the real-time collaborative chat system that fosters seamless communication among team members.
-
-8. **Email Integration with EmailJS:**
-   - Explore functionalities that involve email communication directly from the client-side using EmailJS.
+## User Interface
