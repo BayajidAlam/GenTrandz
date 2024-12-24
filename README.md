@@ -137,7 +137,8 @@ Here is our high-level estimate:
 
 This is the general data model which reflects our requirements.
 
-![matt-mons-datamodel](https://i.ibb.co/cXHJ2Zv/Matt-mons-drawio.png)
+![diagram-export-12-18-2024-3_45_51-PM](https://github.com/user-attachments/assets/0e832a91-f4a4-4211-948a-7df3a1323405)
+
 
 We have the following tables:
 
